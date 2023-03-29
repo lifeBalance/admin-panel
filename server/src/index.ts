@@ -1,6 +1,7 @@
 import express, { Application, Request, Response, NextFunction } from 'express'
 import routes from './routes'
 import cors from 'cors'
+import cookieParser from 'cookie-parser'
 
 const app: Application = express()
 
@@ -9,6 +10,7 @@ app.use(cors({
   credentials: true,
   origin: ['http://localhost:3000']
 }))
+app.use(cookieParser())
 
 app.use('/api', routes)
 

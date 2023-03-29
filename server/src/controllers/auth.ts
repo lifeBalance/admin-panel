@@ -40,7 +40,9 @@ export const LogIn: RequestHandler = async (req, res) => {
   const payload = {
     id: user.id,
   }
-  const token = sign(payload, 'secret') // let's keep secret simple for now.
+  // console.log(process.env.SECRET_KEY) // testing
+  const token = sign(payload, process.env.SECRET_KEY!)
+
   res.cookie('jwt', token, {
     httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000, // 1 day
@@ -66,8 +68,8 @@ export const AuthenticatedUser: RequestHandler = async (req, res) => {
     return res.status(401).json({ message: 'unauthenticated'})
 
   try {
-    const payload: any = verify(jwt, 'secret')
-  
+    const payload: any = verify(jwt, process.env.SECRET_KEY!)
+
     if (!payload) return res.status(401).json({ message: 'unauthenticated' })
   
     const userRepository = AppDataSource.getRepository(User)

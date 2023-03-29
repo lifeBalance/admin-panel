@@ -12,7 +12,7 @@ const AppDataSource = new DataSource({
   entities: [
     User
   ],
-  logging: true,
+  logging: false,
   synchronize: true
 })
 

@@ -8,5 +8,6 @@
     "watch": [
         "src/*"
     ],
-    "ext": "js,json,ts"
+    "ext": "js,json,ts",
+    "exec": "ts-node --files ./src/index.ts"
 }

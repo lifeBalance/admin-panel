@@ -3,7 +3,7 @@ import { RegisterValidation } from '../validation/register'
 import AppDataSource from '../db/appDataSource'
 import { User } from '../entity/user'
 import bcrypt from 'bcrypt'
-import { sign, verify } from 'jsonwebtoken'
+import { sign } from 'jsonwebtoken'
 
 export const Register: RequestHandler = async (req, res) => {
   const { first_name, last_name, email, password } = req.body
@@ -60,28 +60,11 @@ export const LogIn: RequestHandler = async (req, res) => {
   else return res.status(400).json({ message: 'invalid credentials' })
 }
 
-export const AuthenticatedUser: RequestHandler = async (req, res) => {
-  // Thanks to cookie-parser we can access the jwt in the cookie sent by the user.
-  const { jwt } = req.cookies
-
-  if (!jwt)
-    return res.status(401).json({ message: 'unauthenticated'})
-
-  try {
-    const payload: any = verify(jwt, process.env.SECRET_KEY!)
-
-    if (!payload) return res.status(401).json({ message: 'unauthenticated' })
-  
-    const userRepository = AppDataSource.getRepository(User)
-    const user = await userRepository.findOneBy({ id: payload.id })
-
-    if (user) {
-      const { password: pwd, ...userNoPassword } = user
-      res.status(200).json({ user: userNoPassword })
-    }
-  } catch (error) {
-    return res.status(401).json({ message: 'unauthenticated' })
-  }
+// export const AuthenticatedUser: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
+export const AuthenticatedUser: RequestHandler = async (req, res, next) => {
+  const { password, ...user } = req.user
+  // console.log(user) // check the password is not being sent!
+  res.status(200).json({ user: user })
 }
 
 export const LogOut: RequestHandler = async (req, res) => {

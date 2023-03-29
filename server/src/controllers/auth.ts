@@ -24,7 +24,7 @@ export const Register: RequestHandler = async (req, res) => {
   return error ? res.status(400).json({ error: error }) : res.status(200).json({ message: user })
 }
 
-export const Login: RequestHandler = async (req, res) => {
+export const LogIn: RequestHandler = async (req, res) => {
   const { email, password } = req.body
 
   // setup the query
@@ -62,16 +62,31 @@ export const AuthenticatedUser: RequestHandler = async (req, res) => {
   // Thanks to cookie-parser we can access the jwt in the cookie sent by the user.
   const { jwt } = req.cookies
 
-  const payload: any = verify(jwt ,'secret')
-
-  if (!payload)
+  if (!jwt)
     return res.status(401).json({ message: 'unauthenticated'})
-  
-  const userRepository = AppDataSource.getRepository(User)
-  const user = await userRepository.findOneBy({ id: payload.id })
 
-  if (user) {
-    const { password: pwd, ...userNoPassword} = user
-    res.status(200).json({user: userNoPassword})
+  try {
+    const payload: any = verify(jwt, 'secret')
+  
+    if (!payload) return res.status(401).json({ message: 'unauthenticated' })
+  
+    const userRepository = AppDataSource.getRepository(User)
+    const user = await userRepository.findOneBy({ id: payload.id })
+
+    if (user) {
+      const { password: pwd, ...userNoPassword } = user
+      res.status(200).json({ user: userNoPassword })
+    }
+  } catch (error) {
+    return res.status(401).json({ message: 'unauthenticated' })
   }
+}
+
+export const LogOut: RequestHandler = async (req, res) => {
+  res.cookie('jwt', '', {
+    httpOnly: true,
+    maxAge: 0, // Expired
+  })
+
+  return res.status(200).json({ message: 'success' })
 }

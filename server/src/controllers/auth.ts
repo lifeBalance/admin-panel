@@ -3,6 +3,7 @@ import { RegisterValidation } from '../validation/register'
 import AppDataSource from '../db/appDataSource'
 import { User } from '../entity/user'
 import bcrypt from 'bcrypt'
+import { sign } from 'jsonwebtoken'
 
 export const Register: RequestHandler = async (req, res) => {
   const {first_name, last_name, email, password } = req.body
@@ -34,13 +35,25 @@ export const Login: RequestHandler = async (req, res) => {
   if (!user)
     return res.status(404).json({ message: 'invalid credentials' })
 
+  // Compare the plaintext password with the hashed one in the database.
   const match = await bcrypt.compare(password, user.password)
 
+  const payload = {
+    id: user.id
+  }
+  const token = sign(payload, 'secret') // let's keep secret simple for now.
+  res.cookie('jwt', token, {
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000 // 1 day
+  })
+
+  // Extract the password before sending the user (sensitive information)
   const { password: pwd, ...userNoPassword} = user
 
   if (match === true) return res.status(200).json({
-    message: 'wooohoo',
-    user: userNoPassword
+    message: 'success',
+    user: userNoPassword,
+    // token: jwt // send in httpOnly cookie
   })
   else return res.status(400).json({ message: 'invalid credentials' })
 }

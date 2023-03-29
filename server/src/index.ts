@@ -1,10 +1,14 @@
 import express, { Application, Request, Response, NextFunction } from 'express'
 import routes from './routes'
+import cors from 'cors'
 
 const app: Application = express()
 
 app.use(express.json()) // middleware for parsing JSON data
-// don't forget the cors middleware 😜
+app.use(cors({
+  credentials: true,
+  origin: ['http://localhost:3000']
+}))
 
 app.use('/api', routes)
 

@@ -2,9 +2,9 @@ import express, { Application, Request, Response, NextFunction } from 'express'
 import routes from './routes'
 
 // Import the connection wherever you needed (done here for testing)
-import AppDataSource from './db/appDataSource'
+// import AppDataSource from './db/appDataSource'
 // console.log(AppDataSource)
-AppDataSource // Not a function call, just... don't know what's that?!
+// AppDataSource // Not a function call, just... don't know what's that?!
 
 const app: Application = express()
 

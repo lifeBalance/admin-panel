@@ -3,14 +3,17 @@ version: '3.1'
 
 services:
   db:
-    image: mysql:8.0.29-debian
+    image: mysql:debian
+    # build:
+    #   context: ./
+    #   dockerfile: Dockerfile
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 1234
       TZ: Europe/Helsinki
     volumes:
       # Mount folder with DB initialization scripts (they run when container starts)
-      - ./docker/mysql:/docker-entrypoint-initdb.d
+      - ./db_setup.sql:/docker-entrypoint-initdb.d/db_setup.sql
       # - ./db-data:/var/lib/mysql # Mount data in host (no need)
 
   adminer:

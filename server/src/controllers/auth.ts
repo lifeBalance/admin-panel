@@ -93,7 +93,6 @@ export const UpdateInfo: RequestHandler = async (req, res) => {
   })
   // console.log('update returns', result) // checking what the query returns..
 
-
   /* The queries don't return anything useful, so we gotta fetch the user. */
   const foundUser = await userRepository.findOneBy({ id: uid })
   if (foundUser) {

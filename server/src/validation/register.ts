@@ -7,3 +7,9 @@ export const RegisterValidation = Joi.object({
   password: Joi.string().required(),
   password_confirm: Joi.any().valid(Joi.ref('password'))
 })
+
+export const UpdatePasswordValidation = Joi.object({
+  password: Joi.string().required(),
+  password_confirm: Joi.any()
+    .valid(Joi.ref('password'))
+})

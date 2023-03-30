@@ -4,16 +4,33 @@ import { User } from '../entity/user'
 import { hash } from 'bcrypt'
 
 export const Users: RequestHandler = async (req, res) => {
+  const take = 3
+  const page = req.query.page || '1'
+
   // setup the query
   const userRepository = AppDataSource.getRepository(User)
-  // update the user in the db
-  const result = await userRepository.find({ relations: ['role'] })
+  // fetch the list of products
+  const [data, total] = await userRepository.findAndCount({
+    take: take,
+    skip: (+page - 1) * take,
+    relations: ['role']
+  })
+
   // Let's remove the passwords from the list of users.
-  const users = result.map((u) => {
+  const users = data.map((u) => {
     const { password, ...user } = u
     return user
   })
-  res.status(200).json({ message: 'success', users: users })
+
+  res.status(200).json({
+    message: 'success',
+    users: users,
+    meta: {
+      total,
+      page: +page,
+      last_page: Math.ceil(total / take),
+    },
+  })
 }
 
 export const CreateUser: RequestHandler = async (req, res) => {

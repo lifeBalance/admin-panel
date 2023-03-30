@@ -1,4 +1,6 @@
-import { Router } from 'express'
+import { Router, Request } from 'express'
+// import multer from 'multer'
+// import { extname } from 'path'
 import {
   Register,
   LogIn,
@@ -7,17 +9,18 @@ import {
   UpdateInfo,
   UpdatePassword,
 } from './controllers/auth'
+import { UploadImage } from './controllers/image'
 import { Permissions } from './controllers/permission'
-import { CreateProduct, DeleteProduct, GetProduct, GetProducts, UpdateProduct } from './controllers/product'
+import {
+  CreateProduct,
+  DeleteProduct,
+  GetProduct,
+  GetProducts,
+  UpdateProduct,
+} from './controllers/product'
 import { CreateRole, GetRoles, GetRole, UpdateRole, DeleteRole } from './controllers/role'
 
-import {
-  CreateUser,
-  DeleteUser,
-  GetUser,
-  UpdateUser,
-  Users,
-} from './controllers/user'
+import { CreateUser, DeleteUser, GetUser, UpdateUser, Users } from './controllers/user'
 
 import { Auth } from './middleware/auth'
 
@@ -49,5 +52,17 @@ router.post('/products', Auth, CreateProduct)
 router.get('/products/:id', Auth, GetProduct)
 router.put('/products/:id', Auth, UpdateProduct)
 router.delete('/products/:id', Auth, DeleteProduct)
+
+// type FileNameCallback = (error: Error | null, filename: string) => void
+// const storage = multer.diskStorage({
+//   destination: './uploads',
+//   filename: (_: Request, file: Express.Multer.File, callback: FileNameCallback) => {
+//     const randomName = Math.random().toString(20).substring(2, 12)
+
+//     callback(null, `${randomName}${extname(file.originalname)}`)
+//   },
+// })
+// router.post('/upload', Auth, multer({ storage }).single('image'), UploadImage)
+router.post('/upload', Auth, UploadImage)
 
 export default router

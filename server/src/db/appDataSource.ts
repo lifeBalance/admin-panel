@@ -1,4 +1,5 @@
 import { DataSource } from 'typeorm'
+import { Permission } from '../entity/permission'
 import { Role } from '../entity/role'
 import { User } from '../entity/user'
 
@@ -12,7 +13,8 @@ const AppDataSource = new DataSource({
   database: 'node_admin',
   entities: [
     User,
-    Role
+    Role,
+    Permission
   ],
   logging: false,
   synchronize: true

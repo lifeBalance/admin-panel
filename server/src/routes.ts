@@ -8,6 +8,7 @@ import {
   UpdatePassword,
 } from './controllers/auth'
 import { Permissions } from './controllers/permission'
+import { CreateProduct, DeleteProduct, GetProduct, GetProducts, UpdateProduct } from './controllers/product'
 import { CreateRole, GetRoles, GetRole, UpdateRole, DeleteRole } from './controllers/role'
 
 import {
@@ -42,5 +43,11 @@ router.post('/roles', Auth, CreateRole)
 router.get('/roles/:id', Auth, GetRole)
 router.put('/roles/:id', Auth, UpdateRole)
 router.delete('/roles/:id', Auth, DeleteRole)
+
+router.get('/products', Auth, GetProducts)
+router.post('/products', Auth, CreateProduct)
+router.get('/products/:id', Auth, GetProduct)
+router.put('/products/:id', Auth, UpdateProduct)
+router.delete('/products/:id', Auth, DeleteProduct)
 
 export default router

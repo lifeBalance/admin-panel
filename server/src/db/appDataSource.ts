@@ -2,6 +2,7 @@ import { DataSource } from 'typeorm'
 import { User } from '../entity/user'
 import { Role } from '../entity/role'
 import { Permission } from '../entity/permission'
+import { Product } from '../entity/product'
 
 // Create connection to the database
 const AppDataSource = new DataSource({
@@ -14,7 +15,8 @@ const AppDataSource = new DataSource({
   entities: [
     User,
     Role,
-    Permission
+    Permission,
+    Product
   ],
   // logging: true,
   synchronize: true

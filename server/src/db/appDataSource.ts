@@ -1,4 +1,5 @@
 import { DataSource } from 'typeorm'
+import { Role } from '../entity/role'
 import { User } from '../entity/user'
 
 // Create connection to the database
@@ -10,7 +11,8 @@ const AppDataSource = new DataSource({
   password: '1234',
   database: 'node_admin',
   entities: [
-    User
+    User,
+    Role
   ],
   logging: false,
   synchronize: true

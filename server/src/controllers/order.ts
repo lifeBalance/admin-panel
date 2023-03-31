@@ -1,6 +1,8 @@
 import { RequestHandler } from 'express'
+import { Parser } from 'json2csv'
 import AppDataSource from '../db/appDataSource'
 import { Order } from '../entity/order'
+import { OrderItem } from '../entity/order.item'
 
 export const GetOrders: RequestHandler = async (req, res) => {
   const page = req.query.page || '1'
@@ -33,4 +35,49 @@ export const GetOrders: RequestHandler = async (req, res) => {
       last_page: Math.ceil(total / take),
     },
   })
+}
+
+export const ExportOrders:RequestHandler = async (req, res) => {
+  const parser = new Parser({
+    fields: ['ID', 'Name', 'Email', 'Product Title', 'Price', 'Quantity']
+  })
+  const orderRepository = AppDataSource.getRepository(Order)
+  const orders = await orderRepository.find({
+    relations: ['order_items']
+  })
+
+  interface jsonItem {
+    ID: string | number,
+    Name: string,
+    Email: string,
+    'Product Title': string,
+    Price: string | number,
+    Quantity: string | number
+  }
+
+  const json: jsonItem[] = []
+
+  orders.forEach((order: Order) => {
+    json.push({
+      ID: order.id,
+      Name: order.name,
+      Email: order.email,
+      'Product Title': '',
+      Price: '',
+      Quantity: ''
+    })
+    order.order_items.forEach((item: OrderItem) => {
+      json.push({
+        ID: '',
+        Name: '',
+        Email: '',
+        'Product Title': item.product_title,
+        Price: item.price,
+        Quantity: item.quantity
+      })
+    })
+  })
+
+  const csv = parser.parse(json)
+  res.header('Content-Type', 'text/csv').attachment('orders.csv').send(csv)
 }

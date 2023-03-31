@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon src/index.ts",
     "permissions:seed": "ts-node src/seeder/permission.ts",
-    "products:seed": "ts-node src/seeder/product.ts"
+    "products:seed": "ts-node src/seeder/product.ts",
+    "orders:seed": "ts-node src/seeder/order.ts"
   },
   "keywords": [],
   "author": "",

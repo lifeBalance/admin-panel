@@ -3,6 +3,8 @@ import { User } from '../entity/user'
 import { Role } from '../entity/role'
 import { Permission } from '../entity/permission'
 import { Product } from '../entity/product'
+import { Order } from '../entity/order'
+import { OrderItem } from '../entity/order.item'
 
 // Create connection to the database
 const AppDataSource = new DataSource({
@@ -16,7 +18,9 @@ const AppDataSource = new DataSource({
     User,
     Role,
     Permission,
-    Product
+    Product,
+    Order,
+    OrderItem
   ],
   // logging: true,
   synchronize: true

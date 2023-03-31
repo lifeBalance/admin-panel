@@ -19,7 +19,10 @@ export const Auth: RequestHandler = async (req, res, next) => {
     if (!payload) return res.status(401).json({ message: 'unauthenticated' })
 
     const userRepository = AppDataSource.getRepository(User)
-    const user = await userRepository.findOneBy({ id: payload.id })
+    const user = await userRepository.findOne({
+      where: { id: payload.id},
+      relations: ['role', 'role.permissions']
+    })
 
     if (user)
       req.user = user // Check types/express to see what we did with the 'req' object

@@ -24,6 +24,7 @@ import { CreateRole, GetRoles, GetRole, UpdateRole, DeleteRole } from './control
 import { CreateUser, DeleteUser, GetUser, UpdateUser, Users } from './controllers/user'
 
 import { Auth } from './middleware/auth'
+import { Permission } from './middleware/permission'
 
 const router = Router()
 
@@ -34,25 +35,25 @@ router.get('/user', Auth, AuthenticatedUser)
 router.put('/users/info', Auth, UpdateInfo)
 router.put('/users/password', Auth, UpdatePassword)
 
-router.get('/users', Auth, Users)
-router.post('/users', Auth, CreateUser)
-router.get('/users/:id', Auth, GetUser)
-router.put('/users/:id', Auth, UpdateUser)
-router.delete('/users/:id', Auth, DeleteUser)
+router.get('/users', Auth, Permission('users'), Users)
+router.post('/users', Auth, Permission('users'), CreateUser)
+router.get('/users/:id', Auth, Permission('users'), GetUser)
+router.put('/users/:id', Auth, Permission('users'), UpdateUser)
+router.delete('/users/:id', Auth, Permission('users'), DeleteUser)
 
 router.get('/permissions', Auth, Permissions)
 
-router.get('/roles', Auth, GetRoles)
-router.post('/roles', Auth, CreateRole)
-router.get('/roles/:id', Auth, GetRole)
-router.put('/roles/:id', Auth, UpdateRole)
-router.delete('/roles/:id', Auth, DeleteRole)
+router.get('/roles', Auth, Permission('roles'), GetRoles)
+router.post('/roles', Auth, Permission('roles'), CreateRole)
+router.get('/roles/:id', Auth, Permission('roles'), GetRole)
+router.put('/roles/:id', Auth, Permission('roles'), UpdateRole)
+router.delete('/roles/:id', Auth, Permission('roles'), DeleteRole)
 
-router.get('/products', Auth, GetProducts)
-router.post('/products', Auth, CreateProduct)
-router.get('/products/:id', Auth, GetProduct)
-router.put('/products/:id', Auth, UpdateProduct)
-router.delete('/products/:id', Auth, DeleteProduct)
+router.get('/products', Auth, Permission('products'), GetProducts)
+router.post('/products', Auth, Permission('products'), CreateProduct)
+router.get('/products/:id', Auth, Permission('products'), GetProduct)
+router.put('/products/:id', Auth, Permission('products'), UpdateProduct)
+router.delete('/products/:id', Auth, Permission('products'), DeleteProduct)
 
 // type FileNameCallback = (error: Error | null, filename: string) => void
 // const storage = multer.diskStorage({

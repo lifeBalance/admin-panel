@@ -81,3 +81,15 @@ export const ExportOrders:RequestHandler = async (req, res) => {
   const csv = parser.parse(json)
   res.header('Content-Type', 'text/csv').attachment('orders.csv').send(csv)
 }
+
+export const Chart: RequestHandler = async (req, res) => {
+  // setup the query
+  const queryRunner = await AppDataSource.createQueryRunner()
+  const result = await queryRunner.query(`
+    SELECT DATE_FORMAT(o.created_at, '%Y-%M-%d') as date, SUM(oi.price * oi.quantity) as sum
+    FROM \`order\` o
+    JOIN order_item oi ON o.id = oi.order_id
+    GROUP BY date;
+  `)
+  res.status(200).json({result})
+}

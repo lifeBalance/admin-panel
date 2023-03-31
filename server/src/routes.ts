@@ -10,7 +10,7 @@ import {
   UpdatePassword,
 } from './controllers/auth'
 import { UploadImage } from './controllers/image'
-import { ExportOrders, GetOrders } from './controllers/order'
+import { Chart, ExportOrders, GetOrders } from './controllers/order'
 import { Permissions } from './controllers/permission'
 import {
   CreateProduct,
@@ -69,5 +69,6 @@ router.use('/uploads', express.static('./uploads'))
 
 router.get('/orders', Auth, GetOrders)
 router.post('/export', Auth, ExportOrders)
+router.get('/chart', Auth, Chart)
 
 export default router

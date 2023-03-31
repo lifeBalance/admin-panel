@@ -32,11 +32,13 @@ async function seed() {
   const orderItemRepository = AppDataSource.getRepository(OrderItem)
 
   for (let i = 0; i < 30; i++) {
-    // console.log(p)
+    // Fake date gotta be in a format compatible with MySQL, hence toJSON()...
+    // console.log(faker.date.past(2).toJSON().slice(0, 19).replace('T', ' '))
     const order = await orderRepository.save({
       first_name: faker.name.firstName(),
       last_name: faker.name.lastName(),
       email: faker.internet.email(),
+      created_at: faker.date.past().toJSON().slice(0, 19).replace('T', ' ')
     })
 
     for (let j = 0; j < randomInt(1, 5); j++) {
@@ -53,3 +55,14 @@ async function seed() {
 }
 
 seed()
+
+/**
+ * The following query:
+ *
+ * SELECT DATE_FORMAT(o.created_at, '%Y-%M-%d') as date, SUM(oi.price * oi.quantity) as sum
+ * FROM `order` o
+ * JOIN order_item oi ON o.id = oi.order_id
+ * GROUP BY date;
+ * 
+ * must return a list of dates/sums (not only one)
+ */

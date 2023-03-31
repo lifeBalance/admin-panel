@@ -1,4 +1,4 @@
-import { Router, Request } from 'express'
+import express, { Router, Request } from 'express'
 // import multer from 'multer'
 // import { extname } from 'path'
 import {
@@ -64,5 +64,6 @@ router.delete('/products/:id', Auth, DeleteProduct)
 // })
 // router.post('/upload', Auth, multer({ storage }).single('image'), UploadImage)
 router.post('/upload', Auth, UploadImage)
+router.use('/uploads', express.static('./uploads'))
 
 export default router

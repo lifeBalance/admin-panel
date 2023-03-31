@@ -10,6 +10,7 @@ import {
   UpdatePassword,
 } from './controllers/auth'
 import { UploadImage } from './controllers/image'
+import { GetOrders } from './controllers/order'
 import { Permissions } from './controllers/permission'
 import {
   CreateProduct,
@@ -57,13 +58,15 @@ router.delete('/products/:id', Auth, DeleteProduct)
 // const storage = multer.diskStorage({
 //   destination: './uploads',
 //   filename: (_: Request, file: Express.Multer.File, callback: FileNameCallback) => {
-//     const randomName = Math.random().toString(20).substring(2, 12)
-
+  //     const randomName = Math.random().toString(20).substring(2, 12)
+  
 //     callback(null, `${randomName}${extname(file.originalname)}`)
 //   },
 // })
 // router.post('/upload', Auth, multer({ storage }).single('image'), UploadImage)
 router.post('/upload', Auth, UploadImage)
 router.use('/uploads', express.static('./uploads'))
+
+router.get('/orders', Auth, GetOrders)
 
 export default router

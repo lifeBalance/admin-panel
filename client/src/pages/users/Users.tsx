@@ -4,14 +4,25 @@ import Wrapper from '../../components/Wrapper'
 
 const Users = () => {
   const [users, setUsers] = useState<User[]>([])
+  const [page, setPage] = useState<number>(1)
+  const [lastPage, setLastPage] = useState<number>(0)
 
   useEffect(() => {
     (async () => {
-      const response = await axios.get('/users')
-      console.log(response.data.users)
+      const response = await axios.get(`/users?page=${page}`)
+      // console.log(response.data.users)
       setUsers(response.data.users)
+      setLastPage(response.data.meta.last_page)
     })()
-  }, [])
+  }, [page])
+
+  function onNext() {
+    setPage(prev => (prev + 1 <= lastPage) ? prev + 1 : lastPage)
+  }
+
+  function onPrevious() {
+    setPage(prev => (prev - 1 > 0) ? prev - 1 : 1)
+  }
 
   return (
     <Wrapper>
@@ -41,6 +52,18 @@ const Users = () => {
           </tbody>
         </table>
       </div>
+
+      <nav>
+        <ul className="pagination">
+          <li className="page-item">
+            <a href="#" className="page-link" onClick={onPrevious}>Previous</a>
+          </li>
+
+          <li className="page-item">
+            <a href="#" className="page-link" onClick={onNext}>Next</a>
+          </li>
+        </ul>
+      </nav>
     </Wrapper>
   )
 }

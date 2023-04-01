@@ -1,20 +1,32 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Nav = () => {
   const [user, setUser] = useState<User | undefined>()
+  const navigate = useNavigate()
 
   useEffect(() => {
     (async function () {
-      const response = await axios.get('/user')
-      setUser(response.data.user)
+      try {
+        const response = await axios.get('/user')
+        setUser(response.data.user)
+      } catch (error) {
+        console.log(error)
+      }
     })()
   }, [])
 
   async function logOut() {
-    await axios.post('/logout', {})
-    setUser(undefined)
+    try {
+      const response = await axios.post('/logout', {})
+      if (response.statusText === 'OK') {
+        setUser(undefined)
+        navigate('/login')
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (

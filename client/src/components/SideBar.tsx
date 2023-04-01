@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 
 const SideBar = () => {
   return (
@@ -6,17 +6,15 @@ const SideBar = () => {
       <div className='position-sticky pt-3 sidebar-sticky'>
         <ul className='nav flex-column'>
           <li className='nav-item'>
-            <Link className='nav-link active' aria-current='page' to={'/'}>
-              <span data-feather='home' className='align-text-bottom'></span>
+            <NavLink className={({ isActive }) => isActive ? "nav-link text-primary" : "nav-link text-secondary"} to='/'>
               Dashboard
-            </Link>
+            </NavLink>
           </li>
 
           <li className='nav-item'>
-            <Link className='nav-link active' aria-current='page' to={'/users'}>
-              <span data-feather='home' className='align-text-bottom'></span>
+            <NavLink className={({ isActive }) => isActive ? "nav-link text-primary" : "nav-link text-secondary"} to='/users'>
               Users
-            </Link>
+            </NavLink>
           </li>
         </ul>
       </div>

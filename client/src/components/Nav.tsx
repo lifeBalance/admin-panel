@@ -12,6 +12,7 @@ const Nav = () => {
         const response = await axios.get('/user')
         setUser(response.data.user)
       } catch (error) {
+        navigate('/login')
         console.log(error)
       }
     })()

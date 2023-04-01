@@ -44,7 +44,7 @@ export const CreateUser: RequestHandler = async (req, res) => {
     first_name: first_name,
     last_name: last_name,
     email: email,
-    role: { id: role_id },
+    role: { id: +role_id || 3 },
     password: defaultHashedPassword,
   })
 

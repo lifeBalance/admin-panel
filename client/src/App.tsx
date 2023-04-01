@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Dashboard from './pages/Dashboard'
 import Users from './pages/users/Users'
+import CreateUser from './pages/users/CreateUser'
 import Register from './pages/Register'
 import Login from './pages/Login'
 
@@ -10,9 +11,10 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Dashboard />} />
-          <Route path='/users' element={<Users />} />
           <Route path='/register' element={<Register />} />
           <Route path='/login' element={<Login />} />
+          <Route path='/users' element={<Users />} />
+          <Route path='/users/create' element={<CreateUser />} />
         </Routes>
       </BrowserRouter>
     </div>

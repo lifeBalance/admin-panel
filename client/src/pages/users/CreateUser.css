@@ -1,0 +1,8 @@
+.form-create-user {
+  max-width: 100%;
+  padding: 15px;
+}
+
+.form-create-user input {
+  margin-bottom: 10px;
+}

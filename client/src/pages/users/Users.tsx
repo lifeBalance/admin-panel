@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import Wrapper from '../../components/Wrapper'
 
 const Users = () => {
@@ -11,28 +12,34 @@ const Users = () => {
     (async () => {
       const response = await axios.get(`/users?page=${page}`)
       // console.log(response.data.users)
+      // console.log(page)
       setUsers(response.data.users)
       setLastPage(response.data.meta.last_page)
     })()
   }, [page])
 
   function onNext() {
-    setPage(prev => (prev + 1 <= lastPage) ? prev + 1 : lastPage)
+    setPage((prev) => (prev + 1 <= lastPage) ? prev + 1 : lastPage)
   }
 
   function onPrevious() {
-    setPage(prev => (prev - 1 > 0) ? prev - 1 : 1)
+    setPage((prev) => (prev - 1 > 0) ? prev - 1 : 1)
   }
 
   async function onDelete(id: number) {
     if (window.confirm('You sure you wanna delete this user?')) {
       await axios.delete(`/users/${id}`)
-      setUsers(prev => prev.filter((u: User) => u.id !== id))
+      setUsers((prev) => prev.filter((u: User) => u.id !== id))
     }
   }
 
   return (
     <Wrapper>
+      <div className='pt-3 pb-2 mb-3 border-bottom'>
+        <Link to='/users/create' className='btn btn-sm btn-outline-secondary'>
+          Add User
+        </Link>
+      </div>
       <div className='table-responsive'>
         <table className='table table-striped table-sm'>
           <thead>
@@ -45,33 +52,46 @@ const Users = () => {
             </tr>
           </thead>
           <tbody>
-            {users?.length && users.map((u: User) => {
-              return (
-                <tr key={u.id}>
-                  <td>{u.id}</td>
-                  <td>{u.first_name} {u.last_name}</td>
-                  <td>{u.email}</td>
-                  <td>{u?.role?.name || 'some role bruh'}</td>
-                  <td>
-                    <div className="btn-group mr-2">
-                      <a href="#" className="btn btn-sm btn-outline-secondary" onClick={() => onDelete(u.id)}>Delete</a>
-                    </div>
-                  </td>
-                </tr>
-              )
-            })}
+            {users?.length &&
+              users.map((u: User) => {
+                return (
+                  <tr key={u.id}>
+                    <td>{u.id}</td>
+                    <td>
+                      {u.first_name} {u.last_name}
+                    </td>
+                    <td>{u.email}</td>
+                    <td>{u?.role?.name || 'some role bruh'}</td>
+                    <td>
+                      <div className='btn-group mr-2'>
+                        <a
+                          href='#'
+                          className='btn btn-sm btn-outline-secondary'
+                          onClick={() => onDelete(u.id)}
+                        >
+                          Delete
+                        </a>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              })}
           </tbody>
         </table>
       </div>
 
       <nav>
-        <ul className="pagination">
-          <li className="page-item">
-            <a href="#" className="page-link" onClick={onPrevious}>Previous</a>
+        <ul className='pagination'>
+          <li className='page-item'>
+            <a href='#' className='page-link' onClick={onPrevious}>
+              Previous
+            </a>
           </li>
 
-          <li className="page-item">
-            <a href="#" className="page-link" onClick={() => onNext}>Next</a>
+          <li className='page-item'>
+            <a href='#' className='page-link' onClick={onNext}>
+              Next
+            </a>
           </li>
         </ul>
       </nav>

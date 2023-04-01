@@ -12,11 +12,9 @@ const Login = () => {
     e.preventDefault()
 
     try {
-      const response = await axios.post('http://localhost:3000/api/login', {
+      const response = await axios.post('/login', {
         email,
         password
-      }, {
-        withCredentials: true
       })
 
       if (response.statusText === 'OK') {

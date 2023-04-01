@@ -1,6 +1,10 @@
+import Wrapper from '../components/Wrapper'
+
 const Dashboard = () => {
   return (
-    <div>Dashboard</div>
+    <Wrapper>
+      <div>Dashboard</div>
+    </Wrapper>
   )
 }
 

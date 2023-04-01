@@ -1,6 +1,7 @@
 import { FormEvent, useState } from 'react'
 import './Register.css'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const Register = () => {
   const [firstName, setFirstName] = useState('')
@@ -8,6 +9,7 @@ const Register = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const navigate = useNavigate()
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault()
@@ -21,15 +23,27 @@ const Register = () => {
         password,
         password_confirm: confirmPassword,
       })
-      // Clear input fields
-      setFirstName('')
-      setLastName('')
-      setEmail('')
-      setPassword('')
-      setConfirmPassword('')
-      // console.log(response)
-    } catch (error) {
-      console.log(error)
+
+      console.log(response.statusText);
+      
+      if (response.statusText === 'OK') {
+        // Clear input fields
+        setFirstName('')
+        setLastName('')
+        setEmail('')
+        setPassword('')
+        setConfirmPassword('')
+        console.log(response)
+
+        navigate('/login')
+      }
+    } catch (err) {
+      const error = err as Error | AxiosError
+      if(axios.isAxiosError(error)){
+        console.log(error.response!.data)
+      } else {
+        console.log(error)
+      }
     }
   }
 
@@ -41,6 +55,7 @@ const Register = () => {
         <div className='form-floating'>
           <input
             type='text'
+            value={firstName}
             className='form-control'
             id='firstName'
             onChange={(e) => setFirstName(e.target.value)}
@@ -51,6 +66,7 @@ const Register = () => {
         <div className='form-floating'>
           <input
             type='text'
+            value={lastName}
             className='form-control'
             id='lastName'
             onChange={(e) => setLastName(e.target.value)}
@@ -61,6 +77,7 @@ const Register = () => {
         <div className='form-floating'>
           <input
             type='email'
+            value={email}
             className='form-control'
             id='email'
             onChange={(e) => setEmail(e.target.value)}
@@ -71,6 +88,7 @@ const Register = () => {
         <div className='form-floating'>
           <input
             type='password'
+            value={password}
             autoComplete='on'
             className='form-control'
             id='password'
@@ -82,6 +100,7 @@ const Register = () => {
         <div className='form-floating'>
           <input
             type='password'
+            value={confirmPassword}
             autoComplete='on'
             className='form-control'
             id='confirmPassword'

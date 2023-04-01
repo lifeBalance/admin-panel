@@ -6,15 +6,26 @@ import bcrypt from 'bcrypt'
 import { sign } from 'jsonwebtoken'
 
 export const Register: RequestHandler = async (req, res) => {
-  const { first_name, last_name, email, password } = req.body
+  const { first_name, last_name, email, password, password_confirm } = req.body
 
   // validate the user input
-  const { error } = RegisterValidation.validate(req.body)
+  const { error } = RegisterValidation.validate({
+    first_name,
+    last_name,
+    email,
+    password,
+    password_confirm,
+  })
+  console.log('error registering?', error);
+  
 
   const userRepository = AppDataSource.getRepository(User)
   const hashedPassword = await bcrypt.hash(password, 10)
 
-  const { password: pwd, ...user } = await userRepository.save({
+  const user = await userRepository.findOneBy({ email: email })
+  if (user) return res.status(404).json({ message: 'email already exists' })
+
+  const { password: pwd, ...userWithoutPassword } = await userRepository.save({
     first_name: first_name,
     last_name: last_name,
     email: email,
@@ -23,7 +34,7 @@ export const Register: RequestHandler = async (req, res) => {
 
   return error
     ? res.status(400).json({ error: error })
-    : res.status(200).json({ message: user })
+    : res.status(200).json({ message: userWithoutPassword })
 }
 
 export const LogIn: RequestHandler = async (req, res) => {
@@ -82,7 +93,7 @@ export const UpdateInfo: RequestHandler = async (req, res) => {
   const { id: uid } = req.user // uid: id of the user to be updated (in jwt)
   const { first_name, last_name, email } = req.body // New user intel
   console.log('updating user', uid, 'with:', first_name, last_name, email)
-  
+
   // setup the query
   const userRepository = AppDataSource.getRepository(User)
   // update the user in the db
@@ -103,22 +114,20 @@ export const UpdateInfo: RequestHandler = async (req, res) => {
   res.status(400).json({ message: 'bad request' })
 }
 
-
 export const UpdatePassword: RequestHandler = async (req, res) => {
   const { id: uid } = req.user // uid: id of the user to be updated (in jwt)
   const { password, password_confirm } = req.body // New user password
   console.log('updating user', uid, 'with pwd:', password, password_confirm)
 
   // validate the user password
-  const { error } = UpdatePasswordValidation.validate({password, password_confirm})
-  if (error)
-    return res.status(400).json({message: error.message})
+  const { error } = UpdatePasswordValidation.validate({ password, password_confirm })
+  if (error) return res.status(400).json({ message: error.message })
 
   // Another way of updating a row (createQueryBuilder)
   const result = await AppDataSource.createQueryBuilder()
     .update(User)
     .set({ password: await bcrypt.hash(password, 10) })
-    .where("id = :id", { id: uid })
+    .where('id = :id', { id: uid })
     .execute()
   console.log('update returns', result) // checking what the query returns..
 

@@ -24,6 +24,13 @@ const Users = () => {
     setPage(prev => (prev - 1 > 0) ? prev - 1 : 1)
   }
 
+  async function onDelete(id: number) {
+    if (window.confirm('You sure you wanna delete this user?')) {
+      await axios.delete(`/users/${id}`)
+      setUsers(prev => prev.filter((u: User) => u.id !== id))
+    }
+  }
+
   return (
     <Wrapper>
       <div className='table-responsive'>
@@ -45,7 +52,11 @@ const Users = () => {
                   <td>{u.first_name} {u.last_name}</td>
                   <td>{u.email}</td>
                   <td>{u?.role?.name || 'some role bruh'}</td>
-                  <td>Some action</td>
+                  <td>
+                    <div className="btn-group mr-2">
+                      <a href="#" className="btn btn-sm btn-outline-secondary" onClick={() => onDelete(u.id)}>Delete</a>
+                    </div>
+                  </td>
                 </tr>
               )
             })}
@@ -60,7 +71,7 @@ const Users = () => {
           </li>
 
           <li className="page-item">
-            <a href="#" className="page-link" onClick={onNext}>Next</a>
+            <a href="#" className="page-link" onClick={() => onNext}>Next</a>
           </li>
         </ul>
       </nav>

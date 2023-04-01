@@ -1,5 +1,6 @@
 import { FormEvent, useState } from 'react'
 import './Register.css'
+import axios from 'axios'
 
 const Register = () => {
   const [firstName, setFirstName] = useState('')
@@ -8,10 +9,28 @@ const Register = () => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
 
-  function onSubmit(e: FormEvent) {
+  async function onSubmit(e: FormEvent) {
     e.preventDefault()
 
-    console.log(firstName, lastName, email, password, confirmPassword);
+    console.log(firstName, lastName, email, password, confirmPassword)
+    try {
+      const response = await axios.post('http://localhost:3000/api/register', {
+        first_name: firstName,
+        last_name: lastName,
+        email,
+        password,
+        password_confirm: confirmPassword,
+      })
+      // Clear input fields
+      setFirstName('')
+      setLastName('')
+      setEmail('')
+      setPassword('')
+      setConfirmPassword('')
+      // console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -24,9 +43,9 @@ const Register = () => {
             type='text'
             className='form-control'
             id='firstName'
-            onChange={e => setFirstName(e.target.value)}
+            onChange={(e) => setFirstName(e.target.value)}
           />
-          <label htmlFor="firstName">First Name</label>
+          <label htmlFor='firstName'>First Name</label>
         </div>
 
         <div className='form-floating'>
@@ -34,9 +53,9 @@ const Register = () => {
             type='text'
             className='form-control'
             id='lastName'
-            onChange={e => setLastName(e.target.value)}
+            onChange={(e) => setLastName(e.target.value)}
           />
-          <label htmlFor="lastName">Last Name</label>
+          <label htmlFor='lastName'>Last Name</label>
         </div>
 
         <div className='form-floating'>
@@ -44,9 +63,9 @@ const Register = () => {
             type='email'
             className='form-control'
             id='email'
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
           />
-          <label htmlFor="email">Email</label>
+          <label htmlFor='email'>Email</label>
         </div>
 
         <div className='form-floating'>
@@ -55,9 +74,9 @@ const Register = () => {
             autoComplete='on'
             className='form-control'
             id='password'
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
           />
-          <label htmlFor="password">Password</label>
+          <label htmlFor='password'>Password</label>
         </div>
 
         <div className='form-floating'>
@@ -66,9 +85,9 @@ const Register = () => {
             autoComplete='on'
             className='form-control'
             id='confirmPassword'
-            onChange={e => setConfirmPassword(e.target.value)}
+            onChange={(e) => setConfirmPassword(e.target.value)}
           />
-          <label htmlFor="confirmPassword">Confirm Password</label>
+          <label htmlFor='confirmPassword'>Confirm Password</label>
         </div>
 
         <button className='w-100 btn btn-lg btn-primary' type='submit'>

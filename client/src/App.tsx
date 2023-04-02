@@ -7,6 +7,7 @@ import Register from './pages/Register'
 import Login from './pages/Login'
 import Roles from './pages/roles/Roles'
 import CreateRole from './pages/roles/CreateRole'
+import EditRole from './pages/roles/EditRole'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path='/users/:id/edit' element={<EditUser />} />
           <Route path='/roles' element={<Roles />} />
           <Route path='/roles/create' element={<CreateRole />} />
+          <Route path='/roles/:id/edit' element={<EditRole />} />
         </Routes>
       </BrowserRouter>
     </div>

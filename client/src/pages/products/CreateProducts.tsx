@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import ImageUploader from '../../components/ImageUploader'
 import Wrapper from '../../components/Wrapper'
 
 function CreateProducts() {
@@ -27,7 +28,7 @@ function CreateProducts() {
 
   return (
     <Wrapper>
-      <form onSubmit={handleSubmit} className='form-create-role'>
+      <form onSubmit={handleSubmit}>
         <h1 className='h3 mb-3 fw-normal'>Add New Product</h1>
 
         <div className='mb-3'>
@@ -53,14 +54,17 @@ function CreateProducts() {
         </div>
 
         <div className='mb-3'>
-          <label htmlFor='roleName'>Image</label>
-          <input
-            type='text'
-            value={image}
-            className='form-control'
-            id='roleName'
-            onChange={(e) => setImage(e.target.value)}
-          />
+          <label htmlFor='productImage'>Product Image</label>
+          <div className="input-group">
+            <input
+              type='text'
+              value={image}
+              className='form-control'
+              id='productImage'
+              onChange={(e) => setImage(e.target.value)}
+            />
+            <ImageUploader setImage={setImage} />
+          </div>
         </div>
 
         <div className='mb-3'>

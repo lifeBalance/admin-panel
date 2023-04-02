@@ -27,6 +27,11 @@ const SideBar = () => {
               Products
             </NavLink>
           </li>
+          <li className='nav-item'>
+            <NavLink className={({ isActive }) => isActive ? "nav-link text-primary" : "nav-link text-secondary"} to='/orders'>
+              Orders
+            </NavLink>
+          </li>
         </ul>
       </div>
     </nav>

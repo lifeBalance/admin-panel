@@ -1,0 +1,99 @@
+import axios from 'axios'
+import { FormEvent, useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import ImageUploader from '../../components/ImageUploader'
+import Wrapper from '../../components/Wrapper'
+
+function EditProduct() {
+  const [title, setTitle] = useState<string>('')
+  const [description, setDescription] = useState<string>('')
+  const [image, setImage] = useState<string>('')
+  const [price, setPrice] = useState<number>(0)
+  const navigate = useNavigate()
+  const location = useLocation()
+  const product = location.state
+  // console.log(location.state)
+
+  useEffect(() => {
+      setTitle(product.title)
+      setDescription(product.description)
+      setImage(product.image)
+      setPrice(product.price)
+  }, [])
+
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault()
+    const response = await axios.put(`/products/${product.id}`, {
+      title,
+      description,
+      image,
+      price,
+    })
+    // console.log(response)
+
+    if (response.statusText === 'Accepted') {
+      navigate('/products')
+    }
+  }
+
+  return (
+    <Wrapper>
+      <form onSubmit={handleSubmit}>
+        <h1 className='h3 mb-3 fw-normal'>Edit Product</h1>
+
+        <div className='mb-3'>
+          <label htmlFor='roleName'>Title</label>
+          <input
+            type='text'
+            value={title}
+            className='form-control'
+            id='roleName'
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </div>
+
+        <div className='mb-3'>
+          <label htmlFor='roleName'>Description</label>
+          <input
+            type='text'
+            value={description}
+            className='form-control'
+            id='roleName'
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </div>
+
+        <div className='mb-3'>
+          <label htmlFor='productImage'>Product Image</label>
+          <div className="input-group">
+            <input
+              type='text'
+              value={image}
+              className='form-control'
+              id='productImage'
+              onChange={(e) => setImage(e.target.value)}
+            />
+            <ImageUploader setImage={setImage} />
+          </div>
+        </div>
+
+        <div className='mb-3'>
+          <label htmlFor='roleName'>Price</label>
+          <input
+            type='number'
+            value={price}
+            className='form-control'
+            id='roleName'
+            onChange={(e) => setPrice(e.target.valueAsNumber)}
+          />
+        </div>
+
+        <button className='w-100 btn btn-lg btn-primary' type='submit'>
+          Submit
+        </button>
+      </form>
+    </Wrapper>
+  )
+}
+
+export default EditProduct

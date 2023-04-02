@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import Paginator from '../../components/Paginator'
 import Wrapper from '../../components/Wrapper'
 
 const Users = () => {
@@ -17,14 +18,6 @@ const Users = () => {
       setLastPage(response.data.meta.last_page)
     })()
   }, [page])
-
-  function onNext() {
-    setPage((prev) => (prev + 1 <= lastPage) ? prev + 1 : lastPage)
-  }
-
-  function onPrevious() {
-    setPage((prev) => (prev - 1 > 0) ? prev - 1 : 1)
-  }
 
   async function onDelete(id: number) {
     if (window.confirm('You sure you wanna delete this user?')) {
@@ -87,21 +80,7 @@ const Users = () => {
         </table>
       </div>
 
-      <nav>
-        <ul className='pagination'>
-          <li className='page-item'>
-            <a href='#' className='page-link' onClick={onPrevious}>
-              Previous
-            </a>
-          </li>
-
-          <li className='page-item'>
-            <a href='#' className='page-link' onClick={onNext}>
-              Next
-            </a>
-          </li>
-        </ul>
-      </nav>
+      <Paginator lastPage={lastPage} setPage={setPage} />
     </Wrapper>
   )
 }

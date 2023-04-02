@@ -1,20 +1,13 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import Paginator from '../../components/Paginator'
 import Wrapper from '../../components/Wrapper'
 
 function Products() {
   const [products, setProducts] = useState([])
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState<number>(1)
   const [lastPage, setLastPage] = useState<number>(0)
-
-  function onNext() {
-    setPage((prev) => (prev + 1 <= lastPage) ? prev + 1 : lastPage)
-  }
-
-  function onPrevious() {
-    setPage((prev) => (prev - 1 > 0) ? prev - 1 : 1)
-  }
 
   useEffect(() => {
     ;(async () => {
@@ -86,21 +79,7 @@ function Products() {
         </table>
       </div>
 
-      <nav>
-        <ul className='pagination'>
-          <li className='page-item'>
-            <a href='#' className='page-link' onClick={onPrevious}>
-              Previous
-            </a>
-          </li>
-
-          <li className='page-item'>
-            <a href='#' className='page-link' onClick={onNext}>
-              Next
-            </a>
-          </li>
-        </ul>
-      </nav>
+      <Paginator lastPage={lastPage} setPage={setPage} />
     </Wrapper>
   )
 }

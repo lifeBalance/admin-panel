@@ -16,6 +16,12 @@ const SideBar = () => {
               Users
             </NavLink>
           </li>
+
+          <li className='nav-item'>
+            <NavLink className={({ isActive }) => isActive ? "nav-link text-primary" : "nav-link text-secondary"} to='/roles'>
+              Roles
+            </NavLink>
+          </li>
         </ul>
       </div>
     </nav>

@@ -17,4 +17,8 @@ declare global {
     email: string,
     role: Role
   }
+  interface Permission {
+    id: number,
+    name: string
+  }
 }

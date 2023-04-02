@@ -8,6 +8,7 @@ import Login from './pages/Login'
 import Roles from './pages/roles/Roles'
 import CreateRole from './pages/roles/CreateRole'
 import EditRole from './pages/roles/EditRole'
+import Products from './pages/products/products'
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path='/roles' element={<Roles />} />
           <Route path='/roles/create' element={<CreateRole />} />
           <Route path='/roles/:id/edit' element={<EditRole />} />
+          <Route path='/products' element={<Products />} />
         </Routes>
       </BrowserRouter>
     </div>

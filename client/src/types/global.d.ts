@@ -17,8 +17,17 @@ declare global {
     email: string,
     role: Role
   }
+
   interface Permission {
     id: number,
     name: string
+  }
+
+  interface Product {
+    id: number,
+    title: string,
+    description: string,
+    image: string,
+    price: number
   }
 }

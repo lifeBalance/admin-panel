@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import OrderItemsTable from '../../components/OrderItemTable'
 import Paginator from '../../components/Paginator'
 import Wrapper from '../../components/Wrapper'
@@ -12,6 +13,21 @@ function Orders() {
 
   function selectVisible(id: number) {
     setVisible(visible === id ? 0 : id)
+  }
+
+  async function handleExport() {
+    const response = await axios.post('/export', {}, {
+      responseType: 'blob',
+    })
+    // console.log(response)
+    if (response.statusText === 'OK') {
+      const blob = new Blob([response.data], { type: 'text/csv' })
+      const url = window.URL.createObjectURL(response.data)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = 'orders.csv'
+      link.click()
+    }
   }
 
   useEffect(() => {
@@ -27,6 +43,11 @@ function Orders() {
 
   return (
     <Wrapper>
+      <div className='pt-3 pb-2 mb-3 border-bottom'>
+        <a className='btn btn-sm btn-outline-secondary' onClick={handleExport}>
+          Export
+        </a>
+      </div>
       <div className='table-responsive'>
         <table className='table table-striped table-sm'>
           <thead>
@@ -59,7 +80,7 @@ function Orders() {
                       </td>
                     </tr>
                     <tr>
-                      <td colSpan={5} className={`${visible === o.id ? '': 'd-none'}`}>
+                      <td colSpan={5} className={`${visible === o.id ? '' : 'd-none'}`}>
                         <OrderItemsTable order_items={o.order_items} />
                       </td>
                     </tr>
